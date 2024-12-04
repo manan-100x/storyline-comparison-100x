@@ -2,4 +2,8 @@
 __pycache__/
 *.pyc
 uploads/
-.DS_Store 
+.DS_Store
+app.py
+app4.py
+templates/index.html
+static/styles.css 
