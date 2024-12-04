@@ -185,4 +185,25 @@ button:hover {
     font-family: var(--body-font);
     font-weight: 500;
 }
+
+.company-details {
+    margin: 20px 0;
+}
+
+.company-details .input-group {
+    margin-bottom: 20px;
+}
+
+.company-details .full-width {
+    width: 100%;
+}
+
+.company-details input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: var(--body-font);
+    font-size: 1rem;
+}
  
