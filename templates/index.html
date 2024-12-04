@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investment Calculator - 100x.vc</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="100x.vc Logo" class="logo">
+        </header>
+        
+        <div class="calculator-container">
+            <h1>Investment Calculator</h1>
+            
+            <form method="POST">
+                <div class="calculation-type">
+                    <label>
+                        <input type="radio" name="calculation_type" value="multiple" checked onchange="toggleInputs()">
+                        Calculate Multiple
+                    </label>
+                    <label>
+                        <input type="radio" name="calculation_type" value="irr" onchange="toggleInputs()">
+                        Calculate IRR
+                    </label>
+                </div>
+
+                <div id="multiple-inputs">
+                    <div class="input-group">
+                        <label for="irr">IRR (%):</label>
+                        <input type="number" step="0.5" name="irr" id="irr" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="time">Time Period (years):</label>
+                        <input type="number" step="1" name="time" id="time" required>
+                    </div>
+                </div>
+
+                <div id="irr-inputs" style="display: none;">
+                    <div class="input-group">
+                        <label for="multiple">Multiple:</label>
+                        <input type="number" step="0.1" name="multiple" id="multiple">
+                    </div>
+                    <div class="input-group">
+                        <label for="time-irr">Time Period (years):</label>
+                        <input type="number" step="1" name="time" id="time-irr">
+                    </div>
+                </div>
+
+                <button type="submit">Calculate</button>
+            </form>
+
+            {% if result is not none %}
+            <div class="result">
+                <h2>Result:</h2>
+                {% if calculation_type == 'multiple' %}
+                    <p>The investment multiple is: {{ result }}x</p>
+                {% else %}
+                    <p>The IRR is: {{ result }}%</p>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        function toggleInputs() {
+            const calculationType = document.querySelector('input[name="calculation_type"]:checked').value;
+            const multipleInputs = document.getElementById('multiple-inputs');
+            const irrInputs = document.getElementById('irr-inputs');
+
+            if (calculationType === 'multiple') {
+                multipleInputs.style.display = 'block';
+                irrInputs.style.display = 'none';
+            } else {
+                multipleInputs.style.display = 'none';
+                irrInputs.style.display = 'block';
+            }
+        }
+    </script>
+</body>
+</html> 
