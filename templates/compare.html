@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
     <title>Storyline Comparison - 100x.vc</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,10 +17,7 @@
         </header>
         
         <div class="comparison-container">
-            <div class="title-container">
-                <img src="{{ url_for('static', filename='logo.png') }}" alt="100x.vc Logo" class="title-logo">
-                <h1>Pitch Comparison Tool</h1>
-            </div>
+            <h1>Pitch Comparison Tool</h1>
             
             <form method="POST" enctype="multipart/form-data">
                 <div class="upload-section">
