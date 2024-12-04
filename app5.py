@@ -7,6 +7,7 @@ from botocore.exceptions import ClientError
 from werkzeug.utils import secure_filename
 from dotenv import load_dotenv
 import html
+from datetime import datetime
 
 # Load environment variables only in development
 if os.getenv('FLASK_ENV') != 'production':
@@ -18,8 +19,7 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 # AWS SES configuration
 AWS_REGION = os.getenv('AWS_REGION')
 SENDER = "100x.vc Intern <mum.intern1@100x.vc>"  # Must be verified in SES
-RECIPIENT = "vatsal@100x.vc"
-SUBJECT = "Document Comparison Results"
+RECIPIENT = "founders@100x.vc"
 
 # Create SES client
 ses_client = boto3.client(
@@ -53,10 +53,21 @@ def send_comparison_email(comparison_result, changes_description):
     CHARSET = "UTF-8"
     email_content = format_comparison_for_email(comparison_result, changes_description)
     
+    # Get company email and name from form data
+    company_email = request.form.get('company_email', '')
+    startup_name = request.form.get('startup_name', '')
+    
+    # Create timestamp
+    current_time = datetime.now().strftime("%d/%m/%y %H:%M")
+    
+    # Create dynamic subject
+    subject = f"{startup_name} Storyline Update as of {current_time}"
+    
     try:
         response = ses_client.send_email(
             Destination={
                 'ToAddresses': [RECIPIENT],
+                'CcAddresses': [company_email] if company_email else [],
             },
             Message={
                 'Body': {
@@ -67,7 +78,7 @@ def send_comparison_email(comparison_result, changes_description):
                 },
                 'Subject': {
                     'Charset': CHARSET,
-                    'Data': SUBJECT,
+                    'Data': subject,
                 },
             },
             Source=SENDER,
@@ -144,6 +155,7 @@ def index():
 
             # Get the changes description
             changes_description = request.form.get('changes_description', '')
+            company_email = request.form.get('company_email', '')
 
             # Extract text from both documents
             original_text = extract_text_from_docx(original_file)
@@ -155,7 +167,7 @@ def index():
             # Send email with comparison results
             email_sent = send_comparison_email(comparison_result, changes_description)
             if email_sent:
-                success_message = "A mail detailing the changes in your pitch has been sent to Vatsal :)"
+                success_message = "A mail detailing the changes in your pitch has been sent to the founders :)"
             else:
                 success_message = None
 
